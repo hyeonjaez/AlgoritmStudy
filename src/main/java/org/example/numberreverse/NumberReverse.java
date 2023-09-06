@@ -9,8 +9,15 @@ public class NumberReverse {
 
         System.out.println(solution3(456, 789));
 
-        System.out.println(reverseNumberRecursive(456));
+        System.out.println(reverseNumberRecursive(456, 0));
+
+        for (int i = 0; i < TESTCASES.length; i++) {
+            System.out.println("Testcase " + i + " = " + test(TESTCASES[i][0], TESTCASES[i][1], TESTCASES[i][2]));
+        }
+
+        System.out.println("정답률 = " + (int) (correctCount / TESTCASES.length * 100) + "%");
     }
+
 
     public static int solution(int a, int b) {
 
@@ -21,9 +28,8 @@ public class NumberReverse {
         return reverseNumber2(reverseNumber2(a) + reverseNumber2(b));
     }
 
-    public static String solution3(int a, int b) {
-        return reverseNumberRecursive(
-                Integer.parseInt(reverseNumberRecursive(a)) + Integer.parseInt(reverseNumberRecursive(b)));
+    public static int solution3(int a, int b) {
+        return reverseNumberRecursive((reverseNumberRecursive(a, 0) + reverseNumberRecursive(b, 0)), 0);
     }
 
     public static int reverseNumber(int num) {
@@ -49,16 +55,36 @@ public class NumberReverse {
         return result;
     }
 
-    public static String reverseNumberRecursive(int number) {
-        StringBuilder sb = new StringBuilder();
+    public static int reverseNumberRecursive(int number, int result) {
 
-        while (number != 0) {
-
-            sb.append(number % 10);
-            number /= 10;
-            reverseNumberRecursive(number);
+        if (number == 0) {
+            return result;
+        } else {
+            result = result * 10 + number % 10;
+            return reverseNumberRecursive(number / 10, result);
         }
-
-        return sb.toString();
     }
+
+    private static double correctCount = 0;
+
+    private static final String[][] TESTCASES = new String[][] {
+            {"123", "123", "246"},
+            {"1000", "1", "2"},
+            {"456", "789", "1461"},
+            {"5", "5", "1"},
+            {"11112", "54321", "65433"},
+            {"3829", "1300", "4139"}
+    };
+
+    private static boolean test(String input, String input2, String answer) {
+        int first = Integer.parseInt(input);
+        int second = Integer.parseInt(input2);
+
+        boolean res = String.valueOf(solution3(first, second)).equals(answer);
+        if (res) {
+            correctCount++;
+        }
+        return res;
+    }
+
 }
