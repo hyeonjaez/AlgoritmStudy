@@ -12,6 +12,23 @@ public class IsPrime {
         System.out.printf("정답률 = %.3f%%", (correct / TEST_CASES.length * 100));
 
 
+        int arr[] = new int[100];
+        boolean[] prime = new boolean[100];
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = i;
+        }
+
+        prime[0] = true;
+        prime[1] = true;
+
+        for (int i = 2; i < Math.sqrt(arr.length); i++) {
+            if (!isPrime(i)) {
+                for (int j = i * i; j < arr.length; j += i) {
+                    prime[j] = true;
+                }
+            }
+        }
     }
 
 
