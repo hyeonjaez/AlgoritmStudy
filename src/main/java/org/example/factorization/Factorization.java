@@ -33,6 +33,7 @@ public class Factorization {
         }
 
         System.out.printf("정답률 = %.3f%%", (correct / TEST_CASES.length * 100));
+        System.out.println(solution2(40));
     }
 
     private static double correct = 0;
@@ -74,6 +75,27 @@ public class Factorization {
 
 
         return sb.toString();
+    }
+
+    public static String solution2(int num) {
+        StringBuilder sb = new StringBuilder();
+
+        int start = 2;
+        return recursion(num, sb, start) + num;
+    }
+
+    public static String recursion(int num, StringBuilder sb, int i) {
+        if (num == 1) {
+            return sb.toString();
+        }
+        if (num % i == 0) {
+            num /= i;
+            sb.append(i + " ");
+
+        } else {
+            i++;
+        }
+        return recursion(num, sb, i);
     }
 
 
