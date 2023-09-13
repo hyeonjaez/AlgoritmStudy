@@ -14,11 +14,12 @@ public class LeastCommonMultiple {
     }
 
     private static final int[][] TEST_CASES = new int[][] {
-            {123, 12, 492},
-            {2, 3, 6},
-            {23, 14, 322},
-            {4, 13, 52},
-            {34, 2, 34}
+            {1, 1, 1},
+            {98, 49, 98},
+            {2, 81, 162},
+            {3, 7, 21},
+            {19, 87, 1653},
+            {1, 40, 40}
     };
 
     private static boolean test(int start, int end, int result) {
