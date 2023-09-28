@@ -1,6 +1,8 @@
 
 {	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(äÛ¼ÿúÿÿÿÿ8ª¯ãÿ¬1
+?
+java:S2189"""Add an end condition to this loop.(Ò—‰„8Âù€¨­1
+T
+java:S2589""7Remove this expression which always evaluates to "true"(Ò—‰„8Âù€¨­1
 ž
 java:S1186	"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Çµí‘8«¯ãÿ¬1
-m
-java:S1149"PReplace the synchronized class "Stack" by an unsynchronized one such as "Deque".(ŠÈÝà8«¯ãÿ¬1

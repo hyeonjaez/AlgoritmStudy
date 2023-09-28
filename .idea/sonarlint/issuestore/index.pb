@@ -13,3 +13,7 @@ s
 Csrc/main/java/org/example/binaryTreeInorderTraversall/Solution.java,e/c/ec60440492d15fe534762c2364ec6b080a7f31c6
 m
 =src/main/java/org/example/binaryTreeInorderTraversall/READ.md,5/5/55eec32ffcf8c56b1da18e6c9bceec9c0fdef7ee
+b
+2src/main/java/org/example/same_number_hate/READ.md,c/a/cae4c2b6540784996025ef3eb8d6ad6702e44e6e
+h
+8src/main/java/org/example/same_number_hate/Solution.java,9/8/983eb655697b05a21ed7511f4126ffc69ecb35fc
