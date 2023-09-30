@@ -17,3 +17,7 @@ b
 2src/main/java/org/example/same_number_hate/READ.md,c/a/cae4c2b6540784996025ef3eb8d6ad6702e44e6e
 h
 8src/main/java/org/example/same_number_hate/Solution.java,9/8/983eb655697b05a21ed7511f4126ffc69ecb35fc
+d
+4src/main/java/org/example/colatz_guess/Solution.java,7/a/7a2813e28814f59a7dee1e9daebb111773e1793d
+^
+.src/main/java/org/example/colatz_guess/READ.md,b/d/bde367ede814185361f2bce7ab325756f503711d
