@@ -21,3 +21,7 @@ h
 .src/main/java/org/example/colatz_guess/READ.md,b/d/bde367ede814185361f2bce7ab325756f503711d
 d
 4src/main/java/org/example/colatz_guess/Solution.java,7/a/7a2813e28814f59a7dee1e9daebb111773e1793d
+\
+,src/main/java/org/example/secret_map/READ.md,6/f/6f7aa44d2d255276318bbced13173da0e2653c86
+b
+2src/main/java/org/example/secret_map/Solution.java,9/f/9f1854e64acde145a18f06a00a35f9ff53c8130f
