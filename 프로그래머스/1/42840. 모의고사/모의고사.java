@@ -32,7 +32,7 @@ class Solution {
         return maxScoreArray;
     }
     
-    public int checkAnswer(int[] answers, int[] pick) {
+    private int checkAnswer(int[] answers, int[] pick) {
         int count = 0;
         for (int i = 0; i < answers.length; i++) {
             if (answers[i] == pick[i % pick.length]) {
