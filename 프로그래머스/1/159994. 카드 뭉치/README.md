@@ -1,6 +1,6 @@
 # [level 1] 카드 뭉치 - 159994 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/159994?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/159994) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 04월 22일 00:43:01
+2024년 04월 22일 00:43:22
 
 ### 문제 설명
 
