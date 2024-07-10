@@ -1,45 +1,60 @@
+import java.io.*;
 import java.util.*;
- 
-public class Main {    
- 
-    static int min = Integer.MAX_VALUE;
-    static int n, k;
-    static boolean[] visited;
-    static int max = 100000;
-    
-    public static void main(String args[]) {
-        Scanner scan = new Scanner(System.in);
-        
-        n = scan.nextInt();
-        k = scan.nextInt();
-        
-        visited = new boolean[max + 1];
-        bfs();
-        System.out.println(min);
-    }
-    
-    public static void bfs() {
-        Queue<Node> q = new LinkedList<>();
-        q.offer(new Node(n, 0));
-        
-        while(!q.isEmpty()) {
-            Node node = q.poll();
-            visited[node.x] = true;
-            if(node.x == k) min = Math.min(min, node.time);
-            
-            if(node.x * 2 <= max && visited[node.x * 2] == false) q.offer(new Node(node.x * 2, node.time));
-            if(node.x + 1 <= max && visited[node.x + 1] == false) q.offer(new Node(node.x + 1, node.time + 1));
-            if(node.x - 1 >= 0 && visited[node.x - 1] == false) q.offer(new Node(node.x - 1, node.time + 1));
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int subin = Integer.parseInt(st.nextToken());
+            int brother = Integer.parseInt(st.nextToken());
+
+            System.out.println(bfs(subin, brother));
+
+
         }
     }
-    
-    public static class Node {
-        int x;
-        int time;
-        
-        public Node(int x, int time) {
-            this.x = x;
-            this.time = time;
+
+    public static int bfs(int start, int end) {
+        Queue<Node> qu = new LinkedList<>();
+        qu.add(new Node(start, 0));
+        boolean[] visited = new boolean[100001];
+
+
+        int result = Integer.MAX_VALUE;
+
+        while (!qu.isEmpty()) {
+            Node now = qu.poll();
+
+            visited[now.position] = true;
+
+            if (now.position == end) {
+                result = Math.min(result, now.time);
+            }
+
+            if (now.position * 2 < 100001 && !visited[now.position * 2]) {
+                qu.add(new Node(now.position * 2, now.time));
+            }
+
+            if (now.position + 1 < 100001 && !visited[now.position + 1]) {
+                qu.add(new Node(now.position + 1, now.time + 1));
+            }
+
+            if (now.position - 1 >= 0 && !visited[now.position - 1]) {
+                qu.add(new Node(now.position - 1, now.time + 1));
+            }
         }
+        return result;
+    }
+
+}
+
+class Node {
+    int position;
+    int time;
+
+    Node(int position, int time) {
+        this.position = position;
+        this.time = time;
     }
 }
