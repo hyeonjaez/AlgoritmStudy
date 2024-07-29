@@ -1,66 +1,52 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    static int N;
-    static List<List<Integer>> map;
     static boolean[] visited;
     static int result;
+    static List<Integer>[] list;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            N = Integer.parseInt(br.readLine());
-
+            int number = Integer.parseInt(br.readLine());
             int count = Integer.parseInt(br.readLine());
-            visited = new boolean[N + 1];
-            map = new ArrayList<>();
+            visited = new boolean[number + 1];
 
-            for (int i = 0; i <= N; i++) {
-                map.add(new ArrayList<>());
+            list = new ArrayList[number + 1];
+
+            for (int i = 0; i < list.length; i++) {
+                list[i] = new ArrayList<>();
             }
 
             StringTokenizer st;
-            result = 0;
             for (int i = 0; i < count; i++) {
                 st = new StringTokenizer(br.readLine());
                 int x = Integer.parseInt(st.nextToken());
                 int y = Integer.parseInt(st.nextToken());
-                map.get(x).add(y);
-                map.get(y).add(x);
+                list[x].add(y);
+                list[y].add(x);
             }
+            result = 0;
+            dfs(1);
+            System.out.println(result);
 
-            bfs(1);
-            System.out.println(result - 1);
+        } catch (Exception e) {
+            // TODO: handle exception
         }
-
-
     }
 
-    public static void bfs(int start) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(start);
+    public static void dfs(int start) {
+        if (visited[start]) {
+            return;
+        }
 
-        while (!queue.isEmpty()) {
-            int now = queue.poll();
+        visited[start] = true;
 
-            if (!visited[now]) {
+        for (int a : list[start]) {
+            if (!visited[a]) {
                 result++;
-                visited[now] = true;
-
-                for (int n : map.get(now)) {
-                    if (!visited[n]) {
-                        queue.add(n);
-                    }
-                }
+                dfs(a);
             }
         }
     }
-
-
 }
