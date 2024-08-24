@@ -1,42 +1,48 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        List<Integer> list = new ArrayList<>();
 
+        int n = Integer.parseInt(st.nextToken());
+        int goal = Integer.parseInt(st.nextToken());
+
+        int[] trees = new int[n];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            list.add(Integer.parseInt(st.nextToken()));
-        }
-        list.sort(Comparator.comparingInt(Integer::intValue));
-        int min = 0;
-        int max = list.get(list.size() - 1);
 
-        while (min <= max) {
-            int mid = (min + max) / 2;
-            long qwer = 0;
-            for (int value : list) {
-                if (value > mid) {
-                    qwer += (value - mid);
+        for (int i = 0; i < n; i++) {
+            trees[i] = Integer.parseInt(st.nextToken());
+        }
+
+        Arrays.sort(trees);
+
+        int left = 0;
+        int right = trees[n - 1];
+
+        int mid = 0;
+        while (left <= right) {
+            mid = (left + right) / 2;
+            long sum = 0;
+
+            for (int tree : trees) {
+                if (tree > mid) {
+                    sum += (tree - mid);
                 }
             }
-            if (qwer < M) {
-                max = mid - 1;
-            } else{
-                min = mid + 1;
+
+            if (sum < goal) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
 
-        System.out.println(max);
+
+        System.out.println(right);
+
     }
 }
