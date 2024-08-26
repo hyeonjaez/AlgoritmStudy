@@ -1,40 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine());
+		int count = Integer.parseInt(br.readLine());
+		int[] array = new int[26];
+		for (int i = 0; i < count; i++) {
+			String str = br.readLine();
 
-        Map<Integer, Integer> map = new HashMap<>();
+			for (int j = 0; j < str.length(); j++) {
+				int idx = str.charAt(j) - 'A';
+				array[idx] += (int) Math.pow(10, (str.length() - 1) - j);
+			}
+		}
+		Arrays.sort(array);
 
-        for (int i = 0; i < n; i++) {
-            char[] ch = br.readLine().toCharArray();
-            for (int j = ch.length - 1; j >= 0; j--) {
-                int pow = (int) Math.pow(10, ch.length - 1 - j);
-                map.put(ch[j] - 'A', map.getOrDefault(ch[j] - 'A', 0) + pow);
-            }
-        }
+		int sum = 0;
+		int number = 9;
+		for (int i = array.length - 1; i >= 0; i--) {
+			if (array[i] == 0) {
+				break;
+			}
 
-        List<Integer> keyList = map.keySet().stream().collect(Collectors.toList());
-        Collections.sort(keyList, Comparator.comparingInt(map::get));
-
-        int total = 0;
-        int num = 10 - map.size();
-        for (int key : keyList) {
-            total += map.get(key) * num;
-            num++;
-        }
-
-        System.out.println(total);
-    }
-
+			sum += (array[i] * number);
+			number--;
+		}
+		System.out.println(sum);
+	}
 }
