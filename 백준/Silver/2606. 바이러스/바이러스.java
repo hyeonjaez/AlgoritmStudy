@@ -1,52 +1,59 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
+    static int n;
+    static int m;
+    static List<Integer>[] map;
     static boolean[] visited;
-    static int result;
-    static List<Integer>[] list;
 
-    public static void main(String[] args) {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            int number = Integer.parseInt(br.readLine());
-            int count = Integer.parseInt(br.readLine());
-            visited = new boolean[number + 1];
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
+        m = Integer.parseInt(br.readLine());
+        map = new List[n + 1];
 
-            list = new ArrayList[number + 1];
-
-            for (int i = 0; i < list.length; i++) {
-                list[i] = new ArrayList<>();
-            }
-
-            StringTokenizer st;
-            for (int i = 0; i < count; i++) {
-                st = new StringTokenizer(br.readLine());
-                int x = Integer.parseInt(st.nextToken());
-                int y = Integer.parseInt(st.nextToken());
-                list[x].add(y);
-                list[y].add(x);
-            }
-            result = 0;
-            dfs(1);
-            System.out.println(result);
-
-        } catch (Exception e) {
-            // TODO: handle exception
+        for (int i = 1; i <= n; i++) {
+            map[i] = new ArrayList<>();
         }
+        StringTokenizer st;
+        visited = new boolean[n + 1];
+
+        for (int i = 0; i < m; i++) {
+            st = new StringTokenizer(br.readLine());
+
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+
+            map[a].add(b);
+            map[b].add(a);
+        }
+
+        dfs(1);
+        int result = 0;
+        for(int i = 2; i<=n; i++){
+            if(visited[i]){
+                result++;
+            }
+        }
+
+        System.out.println(result);
+
     }
 
-    public static void dfs(int start) {
-        if (visited[start]) {
+    public static void dfs(int i) {
+        if (visited[i]) {
             return;
         }
 
-        visited[start] = true;
+        visited[i] = true;
 
-        for (int a : list[start]) {
-            if (!visited[a]) {
-                result++;
-                dfs(a);
+        for (int j : map[i]) {
+            if (!visited[j]) {
+                dfs(j);
             }
         }
     }
+
+
 }
