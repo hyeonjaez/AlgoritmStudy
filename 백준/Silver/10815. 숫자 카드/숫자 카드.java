@@ -1,53 +1,61 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static int n;
-    static int m;
+    static int[] array;
+    static int[] target;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        int[] find = new int[n];
+        int n = Integer.parseInt(br.readLine());
+
+        array = new int[n];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            find[i] = Integer.parseInt(st.nextToken());
+            array[i] = Integer.parseInt(st.nextToken());
         }
-        m = Integer.parseInt(br.readLine());
-        int[] targets = new int[m];
+
+        int m = Integer.parseInt(br.readLine());
+
+        target = new int[m];
+
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < m; i++) {
-            targets[i] = Integer.parseInt(st.nextToken());
+            target[i] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(find);
+        Arrays.sort(array);
+        StringBuilder sb = new StringBuilder();
 
-        for (int i : targets) {
-            System.out.print(isFind(find, i) + " ");
+        for (int i : target) {
+            sb.append(isFind(i)).append(" ");
         }
+
+        System.out.println(sb);
     }
 
-    public static int isFind(int[] find, int target) {
-        int left = 0;
-        int right = find.length - 1;
+    public static int isFind(int target) {
+        int start = 0;
+        int end = array.length - 1;
 
-        while (left <= right) {
-            int mid = (right + left) / 2;
-            if (find[mid] == target) {
+        while (start <= end) {
+            int mid = (start + end) / 2;
+
+            if (target == array[mid]) {
                 return 1;
             }
-            if (find[mid] > target) {
-                right = mid - 1;
-                continue;
-            }
 
-            if (find[mid] < target) {
-                left = mid + 1;
+            if (target < array[mid]) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
             }
         }
+
         return 0;
     }
+
+
 }
