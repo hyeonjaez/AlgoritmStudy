@@ -1,70 +1,77 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static int N;
-    static int M;
+    static int n;
+    static int m;
     static int[][] map;
     static boolean[][] visited;
-    static int[] dx = {0, -1, 0, 1, -1, 1, -1, 1};
-    static int[] dy = {1, 0, -1, 0, 1, 1, -1, -1};
-    static int count;
+    static int[] dx = {0, 0, -1, 1, -1, -1, 1, 1};
+    static int[] dy = {-1, 1, 0, 0, 1, -1, 1, -1};
+
 
     public static void main(String[] args) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            StringTokenizer st;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
 
-            String str = "";
-            StringBuilder sb = new StringBuilder();
-            while (!(str = br.readLine()).equals("0 0")) {
-                st = new StringTokenizer(str);
+        String str = "";
+        StringBuilder sb = new StringBuilder();
+        while (!(str = br.readLine()).equals("0 0")) {
+            st = new StringTokenizer(str);
+            n = Integer.parseInt(st.nextToken());
+            m = Integer.parseInt(st.nextToken());
+            map = new int[m][n];
+            visited = new boolean[m][n];
 
-                N = Integer.parseInt(st.nextToken());
-                M = Integer.parseInt(st.nextToken());
-
-                map = new int[M][N];
-                visited = new boolean[M][N];
-
-                for (int i = 0; i < M; i++) {
-                    st = new StringTokenizer(br.readLine());
-
-                    for (int j = 0; j < N; j++) {
-                        map[i][j] = Integer.parseInt(st.nextToken());
-                    }
+            for (int i = 0; i < m; i++) {
+                st = new StringTokenizer(br.readLine());
+                for (int j = 0; j < n; j++) {
+                    map[i][j] = Integer.parseInt(st.nextToken());
                 }
+            }
 
-                int count = 0;
-
-                for (int i = 0; i < M; i++) {
-                    for (int j = 0; j < N; j++) {
-                        if (!visited[i][j] && map[i][j] == 1) {
+            int count = 0;
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (map[i][j] == 1) {
+                        if (!visited[i][j]) {
                             count++;
                             dfs(i, j);
                         }
                     }
-                }
 
-                sb.append(count).append("\n");
+                }
             }
-            System.out.println(sb);
+
+            System.out.println(count);
+
+
         }
 
     }
 
     public static void dfs(int x, int y) {
+        if (visited[x][y]) {
+            return;
+        }
+
         visited[x][y] = true;
 
         for (int i = 0; i < 8; i++) {
-            int ix = dx[i] + x;
-            int iy = dy[i] + y;
+            int nextX = x + dx[i];
+            int nextY = y + dy[i];
 
-            if (ix >= 0 && ix < M && iy >= 0 && iy < N) {
-                if (!visited[ix][iy] && map[ix][iy] == 1) {
-                    dfs(ix, iy);
+            if (nextX >= 0 && nextX < m && nextY >= 0 && nextY < n) {
+                if (!visited[nextX][nextY]) {
+                    if (map[nextX][nextY] == 1) {
+                        dfs(nextX, nextY);
+                    }
                 }
             }
         }
     }
+
+
 }
