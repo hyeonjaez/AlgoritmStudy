@@ -1,64 +1,57 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        TimeTable[] timeTables = new TimeTable[n];
+
         StringTokenizer st;
+        PriorityQueue<Node> queue = new PriorityQueue<>();
+        PriorityQueue<Integer> time = new PriorityQueue<>();
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            timeTables[i] = new TimeTable(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+            queue.add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
         }
 
-        Arrays.sort(timeTables);
+        Node poll = queue.poll();
+        time.add(poll.end);
 
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
-
-        queue.add(timeTables[0].end);
-
-        for (int i = 1; i < n; i++) {
-            if (queue.peek() <= timeTables[i].start) {
-                queue.poll();
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
+            if (time.peek() <= node.start) {
+                time.poll();
+                time.add(node.end);
+            } else {
+                time.add(node.end);
             }
-
-            queue.add(timeTables[i].end);
         }
 
-        System.out.println(queue.size());
+        System.out.println(time.size());
+
 
     }
+
+
 }
 
-class TimeTable implements Comparable<TimeTable> {
+class Node implements Comparable<Node> {
     int start;
     int end;
 
-    public TimeTable(int start, int end) {
+    public Node(int start, int end) {
         this.start = start;
         this.end = end;
     }
 
     @Override
-    public int compareTo(TimeTable o) {
+    public int compareTo(Node o) {
         if (this.start == o.start) {
             return this.end - o.end;
         }
         return this.start - o.start;
     }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("TimeTable{");
-        sb.append("start=").append(start);
-        sb.append(", end=").append(end);
-        sb.append('}');
-        return sb.toString();
-    }
 }
+
