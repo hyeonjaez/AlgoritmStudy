@@ -1,24 +1,24 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
-    static int n;
-    static int[] array;
-    static int[] target;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
 
-        array = new int[n];
-
+        int[] array = new int[n];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             array[i] = Integer.parseInt(st.nextToken());
         }
 
         Arrays.sort(array);
-        Result result = new Result();
+
+        int[] result = new int[2];
+        int min = Integer.MAX_VALUE;
 
         for (int i = 0; i < n; i++) {
             int now = array[i];
@@ -28,12 +28,12 @@ public class Main {
 
             while (start <= end) {
                 int mid = (start + end) / 2;
-
                 int sum = now + array[mid];
 
-                if (Math.abs(sum) < result.min) {
-                    result.set(now, array[mid]);
-                    result.min = Math.abs(sum);
+                if (Math.abs(sum) < min) {
+                    result[0] = now;
+                    result[1] = array[mid];
+                    min = Math.abs(sum);
                 }
 
                 if (sum < 0) {
@@ -41,11 +41,10 @@ public class Main {
                 } else {
                     end = mid - 1;
                 }
-
             }
         }
 
-        System.out.println(result.first + " " + result.second);
+        System.out.println(result[0] + " " + result[1]);
 
 
     }
@@ -53,16 +52,3 @@ public class Main {
 
 }
 
-class Result {
-    int min = Integer.MAX_VALUE;
-    int first;
-    int second;
-
-    public Result() {
-    }
-
-    public void set(int a, int b) {
-        first = Math.min(a, b);
-        second = Math.max(a, b);
-    }
-}
