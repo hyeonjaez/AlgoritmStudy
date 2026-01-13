@@ -1,42 +1,43 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
+public class Main{
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        List<Long> list = new ArrayList<>();
-
-        for (int i = 0; i < N; i++) {
-            list.add(Long.parseLong(br.readLine()));
+        int n = Integer.parseInt(st.nextToken());
+        int target = Integer.parseInt(st.nextToken());
+        
+        long[] array = new long[n];
+        for(int i = 0; i < n; i++){
+            array[i] = Integer.parseInt(br.readLine());
         }
+        Arrays.sort(array);
 
-        list.sort(Comparator.comparingInt(Long::intValue));
+        long min = 1; 
+        long max = array[n - 1];
+        
 
-        long min = 1;
-        long max = list.get(list.size() - 1) + 1;
-
-        while (min <= max) {
+        while(min <= max){
             long mid = (min + max) / 2;
-            long count = 0;
-            for (long value : list) {
-                count += (value / mid);
-
+            int count = 0;
+            for(long i : array){
+                count += (i) / mid;
             }
 
-            if (count < M) {
+            if(count < target){
                 max = mid - 1;
-            } else {
+            }else{
                 min = mid + 1;
             }
+
         }
+
         System.out.println(max);
+
     }
+
+    
+    
+    
 }
