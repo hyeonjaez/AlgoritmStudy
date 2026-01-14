@@ -1,53 +1,52 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
-public class Main {
+public class Main{
+    static int n;
+    static int[][] array;
+    static long[][] dp;
 
-    static int[][] map;
-    static int N;
-    static long[][] dp; 
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        map = new int[N][N];
-        dp = new long[N][N]; 
+        n = Integer.parseInt(br.readLine());
+        array = new int[n][n];
+        dp = new long[n][n];
 
-        for (int i = 0; i < N; i++) {
+        StringTokenizer st;
+
+        for(int i = 0 ; i <n ; i++){
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
+            for(int j = 0 ; j < n; j ++){
+                array[i][j] = Integer.parseInt(st.nextToken());
                 dp[i][j] = -1;
             }
         }
+        
+        
 
-        long ways = dfs(0, 0);
-        System.out.println(ways);
+        System.out.println(dfs(0,0));
     }
 
-    public static long dfs(int x, int y) {
-        if (x == N - 1 && y == N - 1) {
-            return 1; 
+    static long dfs(int x, int y){
+        if(x ==n-1 && y ==n-1){
+            return 1;
         }
 
-        if (dp[x][y] != -1) {
-            return dp[x][y]; 
+        if(dp[x][y] != -1){
+            return dp[x][y];
         }
 
-        dp[x][y] = 0; 
+        dp[x][y] =0;
+        int jump = array[x][y];
 
-        int jump = map[x][y];
-
-        if (jump > 0) {
-           
-            if (x + jump < N) {
-                dp[x][y] += dfs(x + jump, y);
+        if(jump > 0){
+            if(x + jump < n){
+                dp[x][y] += dfs(x +jump, y);
             }
-            
-            if (y + jump < N) {
-                dp[x][y] += dfs(x, y + jump);
+
+            if(y + jump <n ){
+                dp[x][y] += dfs(x, y+jump);
             }
         }
 
