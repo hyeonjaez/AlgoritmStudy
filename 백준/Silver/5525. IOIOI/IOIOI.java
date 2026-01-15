@@ -1,37 +1,35 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-public class Main {
+public class Main{
 
-    public static void main(String[] args) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 
-            int n = Integer.parseInt(br.readLine());
-            int m = Integer.parseInt(br.readLine());
 
-            String str = "IOI";
-            StringBuilder builder = new StringBuilder(str);
-            for (int i = 1; i < n; i++) {
-                builder.append("OI");
-            }
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        int n = Integer.parseInt(br.readLine());
+        int strLength = Integer.parseInt(br.readLine());
 
-            String a = builder.toString();
+        char[] array = br.readLine().toCharArray();
+        int answer = 0;
+        int count = 0;
+        for(int i = 1; i < strLength - 1;){
+            if(array[i] == 'O' && array[i + 1] == 'I'){
+                count++;
 
-            String target = br.readLine();
-            int sum = 0;
-            for (int i = 0; i < target.length() - a.length() + 1; i++) {
-                String sub = target.substring(i, i + a.length());
-                if (sub.equals(a)) {
-                    sum++;
+                if(count == n){
+                    if(array[i - (count * 2 - 1)] == 'I'){
+                        answer++;
+                    }
+                    count--;
                 }
-
+                i += 2;
+            }  else {
+                count = 0;
+                i++;
             }
-
-            System.out.println(sum);
-
-
         }
+        System.out.println(answer);
     }
-
-
 }
