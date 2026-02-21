@@ -3,85 +3,103 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+
     static int v;
     static int e;
-    static int[] nodeWeight;
-    static List<Node>[] edges;
+    static int start;
+    static int[] array;
+    static List<Node>[] map;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         v = Integer.parseInt(st.nextToken());
         e = Integer.parseInt(st.nextToken());
-        StringBuilder sb = new StringBuilder();
-        int start = Integer.parseInt(br.readLine());
-        edges = new List[v + 1];
-        nodeWeight = new int[v + 1];
 
-        Arrays.fill(nodeWeight, Integer.MAX_VALUE);
+        start = Integer.parseInt(br.readLine());
+
+        map = new List[v + 1];
+        array = new int[v + 1];
 
         for (int i = 1; i <= v; i++) {
-            edges[i] = new ArrayList<>();
+            map[i] = new ArrayList<>();
         }
+
+        Arrays.fill(array, Integer.MAX_VALUE);
 
         for (int i = 0; i < e; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            edges[a].add(new Node(b, c));
+
+            int now = Integer.parseInt(st.nextToken());
+            int index = Integer.parseInt(st.nextToken());
+            int weight = Integer.parseInt(st.nextToken());
+
+            map[now].add(new Node(index, weight));
         }
 
-        search(start);
-        nodeWeight[start] = 0;
-        for (int i = 1; i <= v; i++) {
-            if (nodeWeight[i] == Integer.MAX_VALUE) {
+        da(start);
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= v; i++){
+            if(array[i] == Integer.MAX_VALUE){
                 sb.append("INF").append("\n");
                 continue;
             }
-            sb.append(nodeWeight[i]).append("\n");
+            
+            sb.append(array[i]).append("\n");
         }
-        System.out.println(sb);
+
+        System.out.println(sb.toString());
 
 
     }
 
-    public static void search(int start) {
-        PriorityQueue<Node> queue = new PriorityQueue<>();
-        queue.add(new Node(start, 0));
-        nodeWeight[start] = 0;
-        while (!queue.isEmpty()) {
-            Node node = queue.poll();
-            int distance = node.weight;
-            int nowIndex = node.index;
+    public static void da(int start) {
+        Node startNode = new Node(start, 0);
 
-            if (nodeWeight[nowIndex] < distance) {
+        array[start] = 0;
+
+        PriorityQueue<Node> queue = new PriorityQueue<>();
+        queue.add(startNode);
+
+        while (!queue.isEmpty()) {
+            Node nowNode = queue.poll();
+
+            if (array[nowNode.end] < nowNode.weight) {
                 continue;
             }
 
-            for (Node nextNode : edges[nowIndex]) {
-                int nextDistance =nodeWeight[nowIndex] + nextNode.weight;
-                if (nodeWeight[nextNode.index] > nextDistance) {
-                    nodeWeight[nextNode.index] = nextDistance;
-                    queue.add(new Node(nextNode.index, nextDistance));
+            for (Node nextNode : map[nowNode.end]) {
+                int nextDistance = array[nowNode.end] + nextNode.weight;
+
+                if (array[nextNode.end] > nextDistance) {
+                    array[nextNode.end] = nextDistance;
+                    queue.add(new Node(nextNode.end, nextDistance));
                 }
             }
         }
+
+
     }
 
-    static class Node implements Comparable<Node> {
-        int index;
-        int weight;
 
-        public Node(int index, int weight) {
-            this.index = index;
-            this.weight = weight;
-        }
-
-        @Override
-        public int compareTo(Node o) {
-            return this.weight - o.weight;
-        }
-    }
 }
 
+class Node implements Comparable<Node> {
+    int end;
+    int weight;
+
+    Node(int end, int weight) {
+        this.end = end;
+        this.weight = weight;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        return this.weight - o.weight;
+    }
+
+
+}
