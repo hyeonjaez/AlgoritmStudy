@@ -1,59 +1,44 @@
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static int n;
-    static int[] array;
-    static int[] target;
+
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int n = Integer.parseInt(br.readLine());
 
-        array = new int[n];
+        Set<Integer> set = new HashSet<>();
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            array[i] = Integer.parseInt(st.nextToken());
+
+        for(int i = 0; i <n; i++){
+            set.add(Integer.parseInt(st.nextToken()));
         }
 
-        int m = Integer.parseInt(br.readLine());
-
-        target = new int[m];
+        int count = Integer.parseInt(br.readLine());
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < m; i++) {
-            target[i] = Integer.parseInt(st.nextToken());
-        }
 
-        Arrays.sort(array);
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < count; i++){
+            int now = Integer.parseInt(st.nextToken());
 
-        for (int i : target) {
-            System.out.println(isFind(i));
-        }
-
-    }
-
-    public static int isFind(int target) {
-        int start = 0;
-        int end = array.length - 1;
-
-        while (start <= end) {
-            int mid = (start + end) / 2;
-
-            if (target == array[mid]) {
-                return 1;
+            if(set.contains(now)){
+                sb.append(1);
+            }else{
+                sb.append(0);
             }
 
-            if (target < array[mid]) {
-                end = mid - 1;
-            } else {
-                start = mid + 1;
-            }
+            sb.append("\n");
         }
 
-        return 0;
+        System.out.println(sb);
+
     }
 
 
 }
+
