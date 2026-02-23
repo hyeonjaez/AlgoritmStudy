@@ -1,36 +1,45 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int N = Integer.parseInt(st.nextToken());
-            int K = Integer.parseInt(st.nextToken());
 
-            Queue<Integer> queue = new PriorityQueue<>(Comparator.reverseOrder());
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-            for (int i = 0; i < N; i++) {
-                queue.add(Integer.parseInt(br.readLine()));
-            }
+        int n = Integer.parseInt(st.nextToken());
+        int target = Integer.parseInt(st.nextToken());
 
-            int count = 0;
-            while (!queue.isEmpty()) {
-                int money = queue.poll();
-                if (K >= money) {
-                    int a = K / money;
-                    K -= (money * a);
-                    count += a;
-                }
-            }
+        int[] money = new int[n];
 
-            System.out.println(count);
+        for (int i = 0; i < n; i++) {
+            money[i] = Integer.parseInt(br.readLine());
         }
+
+
+        int answer = 0;
+
+        for (int i = n - 1; i >= 0; i--) {
+            int now = money[i];
+
+            if (now > target) {
+                continue;
+            }
+
+            answer += (target / now);
+            target %= now;
+
+            if(target <= 0){
+                break;
+            }
+        }
+
+        System.out.println(answer);
+
     }
+
+
 }
+
