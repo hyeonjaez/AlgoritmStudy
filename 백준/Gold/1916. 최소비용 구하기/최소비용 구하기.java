@@ -3,54 +3,46 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static int n;
-    static int m;
-    static List<Node>[] map;
-    static int[] distance;
-    static boolean[] visited;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        n = Integer.parseInt(br.readLine());
-        m = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
+
+        int m = Integer.parseInt(br.readLine());
+
+        List<Node>[] map = new List[n + 1];
+        boolean[] visited = new boolean[n + 1];
+
+        int[] count = new int[n + 1];
+        Arrays.fill(count, Integer.MAX_VALUE);
 
 
-        map = new List[n + 1];
-
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i <= n; i++) {
             map[i] = new ArrayList<>();
         }
-
-        distance = new int[n + 1];
-        Arrays.fill(distance, Integer.MAX_VALUE);
-        visited = new boolean[n + 1];
 
         StringTokenizer st;
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
 
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            int count = Integer.parseInt(st.nextToken());
-
-            map[start].add(new Node(end, count));
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            map[a].add(new Node(b, c));
         }
 
         st = new StringTokenizer(br.readLine());
         int start = Integer.parseInt(st.nextToken());
         int end = Integer.parseInt(st.nextToken());
 
-        distance[start] = 0;
-        da(start);
+        count[start] = 0;
 
-        System.out.println(distance[end]);
-    }
 
-    public static void da(int start) {
         PriorityQueue<Node> queue = new PriorityQueue<>();
 
         queue.add(new Node(start, 0));
+
 
         while (!queue.isEmpty()) {
             Node now = queue.poll();
@@ -62,13 +54,16 @@ public class Main {
             visited[now.end] = true;
 
             for (Node next : map[now.end]) {
-                if (distance[next.end] > distance[now.end] + next.count) {
-                    distance[next.end] = distance[now.end] + next.count;
+                if (count[next.end] > count[now.end] + next.count) {
+                    count[next.end] = count[now.end] + next.count;
 
-                    queue.add(new Node(next.end, distance[next.end]));
+                    queue.add(new Node(next.end, count[next.end]));
                 }
             }
         }
+
+        System.out.println(count[end]);
+
     }
 
 
