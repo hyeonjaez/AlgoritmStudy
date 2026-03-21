@@ -1,77 +1,62 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
-import java.io.*;
 
 public class Main {
+    static int n;
+    static int[] array;
 
-	static int n;
-	static int m;
-	static Edge[] edges;
-	static int[] numbers;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		init();
-		for (int i = 0; i < m; i++) {
-			st = new StringTokenizer(br.readLine());
-			int number = Integer.parseInt(st.nextToken());
+        int count = Integer.parseInt(st.nextToken());
 
-			if (number == 0) {
-				union(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-			} else {
-				if (isUnion(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()))) {
-					System.out.println("YES");
-				} else {
-					System.out.println("NO");
-				}
-			}
-		}
+        array = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            array[i] = i;
+        }
+        StringBuilder sb = new StringBuilder();
 
-	}
+        for (int i = 0; i < count; i++) {
+            st = new StringTokenizer(br.readLine());
+            int command = Integer.parseInt(st.nextToken());
+            int n = Integer.parseInt(st.nextToken());
+            int m = Integer.parseInt(st.nextToken());
 
-	public static void init() {
-		numbers = new int[n + 1];
-		for (int i = 0; i < n + 1; i++) {
-			numbers[i] = i;
-		}
-	}
+            if (command == 0) {
+                union(n, m);
+            } else {
+                if (isUnion(n, m)) {
+                    sb.append("YES").append("\n");
+                } else {
+                    sb.append("NO").append("\n");
+                }
+            }
+        }
 
-	public static int find(int target) {
-		if (numbers[target] == target) {
-			return target;
-		}
+        System.out.println(sb);
+    }
 
-		return numbers[target] = find(numbers[target]);
-	}
+    public static int find(int n) {
+        if (array[n] == n) {
+            return n;
+        }
 
-	public static boolean isUnion(int a, int b) {
-		return find(a) == find(b);
-	}
+        return array[n] = find(array[n]);
+    }
 
-	public static boolean union(int a, int b) {
-		int aParent = find(a);
-		int bParent = find(b);
+    public static boolean isUnion(int a, int b) {
+        return find(a) == find(b);
+    }
 
-		if (aParent == bParent) {
-			return false;
-		}
+    public static void union(int a, int b) {
+        int fa = find(a);
+        int fb = find(b);
 
-		numbers[aParent] = bParent;
-
-		return true;
-	}
-
-}
-
-class Edge {
-	int a;
-	int b;
-
-	public Edge(int a, int b) {
-		this.a = a;
-		this.b = b;
-	}
-
+        if (fa != fb) {
+            array[fa] = fb;
+        }
+    }
 }
