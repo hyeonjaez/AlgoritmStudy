@@ -1,97 +1,88 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
-import java.io.*;
 
 public class Main {
 
     static int n;
-    static int limitCount;
-    static int[][] array;
-    static List<House> houseList;
-    static List<Chicken> chickenList;
-    static int chickenCount;
-    static Chicken[] nowChicken;
-    static int min;
+    static int m;
+    static int minResult;
 
-    public static void main(String[] args) {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
+    static List<Node> homeList;
+    static List<Node> chickenList;
+    static Node[] chickens;
 
-            n = Integer.parseInt(st.nextToken());
-            limitCount = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-            houseList = new ArrayList<>();
-            chickenList = new ArrayList<>();
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-            array = new int[n][n];
+        homeList = new ArrayList<>();
+        chickenList = new ArrayList<>();
 
-            for (int i = 0; i < n; i++) {
-                st = new StringTokenizer(br.readLine());
-                for (int j = 0; j < n; j++) {
-                    array[i][j] = Integer.parseInt(st.nextToken());
-                    if (array[i][j] == 1) {
-                        houseList.add(new House(i, j));
-                    }
+        minResult = Integer.MAX_VALUE;
 
-                    if (array[i][j] == 2) {
-                        chickenList.add(new Chicken(i, j));
-                    }
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < n; j++) {
+                int now = Integer.parseInt(st.nextToken());
+
+                if (now == 1) {
+                    homeList.add(new Node(i, j));
+                } else if (now == 2) {
+                    chickenList.add(new Node(i, j));
                 }
             }
-            nowChicken = new Chicken[limitCount];
-            min = Integer.MAX_VALUE;
-            chickenCount = chickenList.size();
-            backTracking(0, 0);
-
-            System.out.println(min);
-
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
+
+        chickens = new Node[m];
+
+        dfs(0,0);
+
+        System.out.println(minResult);
+
+
     }
 
-    public static void backTracking(int start, int depth) {
-        if (depth == limitCount) {
+    public static void dfs(int start, int depth) {
+        if (depth == m) {
             int sum = 0;
-            for (House house : houseList) {
 
-                int nowMin=  Integer.MAX_VALUE;
-                for (Chicken chicken : nowChicken) {
-                    int x = Math.abs(chicken.x - house.x);
-                    int y = Math.abs(chicken.y - house.y);
-                    nowMin = Math.min(x+y, nowMin);
+            for (Node node : homeList) {
+                int minLength = Integer.MAX_VALUE;
+                for (Node chicken : chickens) {
+                    minLength = Math.min(minLength, Math.abs(node.x - chicken.x) + Math.abs(node.y - chicken.y));
                 }
-                sum += nowMin;
+                sum += minLength;
             }
-            min = Math.min(sum, min);
+
+            minResult = Math.min(minResult, sum);
             return;
         }
 
-        for (int i = start; i < chickenCount; i++) {
-            nowChicken[depth] = chickenList.get(i);
-            backTracking(i + 1, depth + 1);
+        for (int i = start; i < chickenList.size(); i++) {
+            chickens[depth] = chickenList.get(i);
+            dfs(i + 1, depth + 1);
         }
     }
 
 
 }
 
-class House {
+class Node implements Comparable<Node> {
     int x;
     int y;
+    int value;
 
-    public House(int x, int y) {
+    Node(int x, int y) {
         this.x = x;
         this.y = y;
     }
-}
 
-class Chicken {
-    int x;
-    int y;
 
-    public Chicken(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public int compareTo(Node o) {
+        return o.value - this.value;
     }
 }
