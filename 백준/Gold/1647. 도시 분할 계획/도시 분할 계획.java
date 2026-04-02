@@ -1,50 +1,60 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
     static int n;
-    static int m;
-    static Edge[] edgeList;
+    static Edge[] array;
     static int[] parents;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        edgeList = new Edge[m];
 
+        n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        init();
+
+        array = new Edge[m];
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            int w = Integer.parseInt(st.nextToken());
-            edgeList[i] = new Edge(a, b, w);
-        }
-        int bigCost = 0;
-        Arrays.sort(edgeList);
-        init();
-        int selectTotal = 0;
-        for (Edge e : edgeList) {
-            if (union(e.start, e.end)) {
-                selectTotal += e.weight;
-                bigCost = e.weight;
-            }
+            int value = Integer.parseInt(st.nextToken());
+            array[i] = new Edge(a, b, value);
         }
 
-        System.out.println(selectTotal - bigCost);
+        Arrays.sort(array);
+
+        int selectTotalValue = 0;
+        int bigCost = 0;
+        for (int i = 0; i < array.length; i++) {
+            Edge now = array[i];
+
+            if (union(now.start, now.end)) {
+                selectTotalValue += now.value;
+                bigCost = now.value;
+            }
+
+
+        }
+
+        System.out.println(selectTotalValue - bigCost);
 
     }
 
     public static void init() {
         parents = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
+
+        for (int i = 1; i < n + 1; i++) {
             parents[i] = i;
         }
     }
 
     public static int find(int a) {
-        if (parents[a] == a) return a;
+        if (parents[a] == a) {
+            return a;
+        }
 
         return parents[a] = find(parents[a]);
     }
@@ -53,27 +63,29 @@ public class Main {
         int aRoot = find(a);
         int bRoot = find(b);
 
-        if (aRoot == bRoot) return false;
-        parents[aRoot] = bRoot;
+        if (aRoot == bRoot) {
+            return false;
+        }
 
+        parents[aRoot] = bRoot;
         return true;
     }
+
 
 }
 
 class Edge implements Comparable<Edge> {
     int start;
     int end;
-    int weight;
+    int value;
 
-    public Edge(int start, int end, int weight) {
+    Edge(int start, int end, int value) {
         this.start = start;
         this.end = end;
-        this.weight = weight;
+        this.value = value;
     }
 
-    @Override
     public int compareTo(Edge o) {
-        return Integer.compare(this.weight, o.weight);
+        return this.value - o.value;
     }
 }
