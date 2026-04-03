@@ -1,60 +1,69 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+    static int n;
+    static int k;
+    static boolean[] visited;
+    static int min;
 
     public static void main(String[] args) throws Exception {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int subin = Integer.parseInt(st.nextToken());
-            int brother = Integer.parseInt(st.nextToken());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-            System.out.println(bfs(subin, brother));
+        n = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
 
+        visited = new boolean[100001];
+        min = Integer.MAX_VALUE;
 
-        }
+        bfs(n);
+
+        System.out.println(min);
     }
 
-    public static int bfs(int start, int end) {
-        Queue<Node> qu = new LinkedList<>();
-        qu.add(new Node(start, 0));
-        boolean[] visited = new boolean[100001];
+    public static void bfs(int n) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(new Node(n, 0));
+        visited[n] = true;
 
-
-        int result = Integer.MAX_VALUE;
-
-        while (!qu.isEmpty()) {
-            Node now = qu.poll();
-
-            visited[now.position] = true;
-
-            if (now.position == end) {
-                result = Math.min(result, now.time);
+        while (!queue.isEmpty()) {
+            Node now = queue.poll();
+            visited[now.index] = true;
+            if (now.index == k) {
+                min = Math.min(now.value, min);
+                continue;
             }
 
-            if (now.position * 2 < 100001 && !visited[now.position * 2]) {
-                qu.add(new Node(now.position * 2, now.time));
+            if (now.index - 1 >= 0) {
+                if (!visited[now.index - 1]) {
+                    queue.add(new Node(now.index - 1, now.value + 1));
+                }
             }
 
-            if (now.position + 1 < 100001 && !visited[now.position + 1]) {
-                qu.add(new Node(now.position + 1, now.time + 1));
+            if (now.index + 1 < 100001) {
+                if (!visited[now.index + 1]) {
+                    queue.add(new Node(now.index + 1, now.value + 1));
+                }
             }
 
-            if (now.position - 1 >= 0 && !visited[now.position - 1]) {
-                qu.add(new Node(now.position - 1, now.time + 1));
+            if (now.index * 2 < 100001) {
+                if (!visited[now.index * 2]) {
+                    queue.add(new Node(now.index * 2, now.value));
+                }
             }
         }
-        return result;
     }
 
 }
 
 class Node {
-    int position;
-    int time;
+    int index;
+    int value;
 
-    Node(int position, int time) {
-        this.position = position;
-        this.time = time;
+    Node(int index, int value) {
+        this.index = index;
+        this.value = value;
     }
 }
