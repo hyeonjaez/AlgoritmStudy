@@ -1,36 +1,34 @@
+
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class Main {
-    static int N;
-    static List<Integer> list;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
 
-        N = Integer.parseInt(br.readLine());
-        list = new ArrayList<>();
-
-        for (int i = 0; i < N; i++) {
-            list.add(Integer.parseInt(br.readLine()));
+        for (int i = 0; i < n; i++) {
+            queue.add(Integer.parseInt(br.readLine()));
         }
 
-        Queue<Integer> queue = new PriorityQueue<>(list);
+        if (queue.isEmpty() || queue.size() == 1) {
+            System.out.println(0);
+            return;
+        }
 
-        int sum = 0;
+        int answer = 0;
         while (queue.size() > 1) {
-            int now = queue.remove();
-            int next = queue.remove();
-            sum += now + next;
-            queue.add(now + next);
+            int now = queue.poll() + queue.poll();
+            answer += now;
+
+            queue.add(now);
         }
 
+        System.out.println(answer);
 
-        System.out.println(sum);
     }
+
 }
