@@ -1,79 +1,75 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+    static int[] dice = {0, 1, 2, 3, 4, 5, 6};
     static int[] map;
+    static int min = Integer.MAX_VALUE;
     static boolean[] visited;
-    static int[] dice = {1, 2, 3, 4, 5, 6};
 
     public static void main(String[] args) throws Exception {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
-
         map = new int[101];
         visited = new boolean[101];
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n + m; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-
-            map[a] = b;
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            map[start] = end;
         }
+        bf();
 
-        for (int i = 0; i < m; i++) {
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-
-            map[a] = b;
-        }
-
-        System.out.println(bfs(1));
+        System.out.println(min);
 
 
     }
 
-    public static int bfs(int start) {
-        Queue<Move> queue = new LinkedList<>();
-        queue.add(new Move(start, 0));
-        visited[start] = true;
+    public static void bf() {
+        Queue<Edge> queue = new LinkedList<>();
+        queue.add(new Edge(1, 0));
+        visited[1] = true;
 
         while (!queue.isEmpty()) {
-            Move now = queue.poll();
+            Edge now = queue.poll();
             if (now.index == 100) {
-                return now.count;
+                min = Integer.min(now.count, min);
+                continue;
             }
 
-            for (int i = 0; i < 6; i++) {
-                int next = dice[i] + now.index;
-                if (next < 101 && !visited[next]) {
+            visited[now.index] = true;
 
-                    if (map[next] != 0) {
-                        next = map[next];
-                    }
-                    visited[next] = true;
-                    queue.add(new Move(next, now.count + 1));
+            for (int i = 1; i <= 6; i++) {
+                int nextIndex = now.index + dice[i];
+                if (nextIndex > 100 || visited[nextIndex]) {
+                    continue;
                 }
 
+                if (map[nextIndex] > 0) {
+                    if (!visited[map[nextIndex]]) {
+                        queue.add(new Edge(map[nextIndex], now.count + 1));
+                    }
+                } else {
+                    queue.add(new Edge(nextIndex, now.count + 1));
+                }
             }
         }
-        return -1;
     }
 
 }
 
-class Move {
+class Edge {
     int index;
     int count;
 
-    Move(int index, int count) {
+    Edge(int index, int count) {
         this.index = index;
         this.count = count;
     }
+
 }
