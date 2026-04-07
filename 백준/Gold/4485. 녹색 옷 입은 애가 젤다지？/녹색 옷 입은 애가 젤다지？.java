@@ -1,85 +1,93 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-	static int n;
-	static int[][] map;
-	static boolean[][] visited;
-	static int[][] size;
-	static int[] dx = { 0, 0, -1, 1 };
-	static int[] dy = { -1, 1, 0, 0 };
+    static int n;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+    static int INF = Integer.MAX_VALUE;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String str = br.readLine();
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-		int count = 1;
-		while (Integer.parseInt(str) != 0) {
-			n = Integer.parseInt(str);
-			map = new int[n][n];
-			size = new int[n][n];
-			visited = new boolean[n][n];
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        int number = 0;
+        while (true) {
+            number++;
+            n = Integer.parseInt(br.readLine());
 
-			for (int i = 0; i < n; i++) {
-				st = new StringTokenizer(br.readLine());
-				for (int j = 0; j < n; j++) {
-					map[i][j] = Integer.parseInt(st.nextToken());
-					size[i][j] = Integer.MAX_VALUE;
-				}
-			}
+            if (n == 0) {
+                System.out.println(sb);
+                return;
+            }
 
-			bfs(0, 0, map[0][0]);
-			sb.append("Problem").append(" ").append(count).append(":").append(" ").append(size[n - 1][n - 1])
-					.append("\n");
-			count++;
-			str = br.readLine();
-		}
-		System.out.println(sb);
+            int[][] map = new int[n][n];
+            int[][] distance = new int[n][n];
+            for (int i = 0; i < n; i++) {
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                for (int j = 0; j < n; j++) {
+                    map[i][j] = Integer.parseInt(st.nextToken());
+                    distance[i][j] = INF;
+                }
+            }
 
-	}
+            int nowAnswer = da(map, distance);
 
-	public static void bfs(int x, int y, int weight) {
-		PriorityQueue<Node> queue = new PriorityQueue<>();
-		visited[x][y] = true;
-		size[x][y] = weight;
-		queue.add(new Node(x, y, weight));
+            sb.append("Problem ").append(number).append(": ").append(nowAnswer).append("\n");
+        }
 
-		while (!queue.isEmpty()) {
-			Node now = queue.poll();
+    }
 
-			for (int i = 0; i < 4; i++) {
-				int nextX = now.x + dx[i];
-				int nextY = now.y + dy[i];
 
-				if (nextX >= 0 && nextX < n && nextY >= 0 && nextY < n) {
-					if (!visited[nextX][nextY]) {
-						int cost = now.weight + map[nextX][nextY];
-						if (size[nextX][nextY] > cost) {
-							size[nextX][nextY] = cost;
-							visited[nextX][nextY] = true;
-							queue.add(new Node(nextX, nextY, size[nextX][nextY]));
-						}
-					}
-				}
-			}
-		}
-	}
+    public static int da(int[][] map, int[][] distance) {
+        PriorityQueue<Edge> queue = new PriorityQueue<>();
+
+        queue.add(new Edge(0, 0, map[0][0]));
+
+        distance[0][0] = map[0][0];
+
+        while (!queue.isEmpty()) {
+            Edge now = queue.poll();
+
+            if (now.x == n - 1 && now.y == n - 1) {
+                distance[n - 1][n - 1] = Math.min(now.value, distance[n - 1][n - 1]);
+                continue;
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int nextX = now.x + dx[i];
+                int nextY = now.y + dy[i];
+
+                if (isMove(nextX, nextY)) {
+                    if (distance[nextX][nextY] > now.value + map[nextX][nextY]) {
+                        distance[nextX][nextY] = now.value + map[nextX][nextY];
+
+                        queue.add(new Edge(nextX, nextY, distance[nextX][nextY]));
+                    }
+                }
+            }
+        }
+
+        return distance[n - 1][n - 1];
+    }
+
+    public static boolean isMove(int x, int y) {
+        return x >= 0 && y >= 0 && x < n && y < n;
+    }
 }
 
-class Node implements Comparable<Node> {
-	int x;
-	int y;
-	int weight;
+class Edge implements Comparable<Edge> {
+    int x;
+    int y;
+    int value;
 
-	Node(int x, int y, int weight) {
-		this.x = x;
-		this.y = y;
-		this.weight = weight;
-	}
+    Edge(int x, int y, int value) {
+        this.x = x;
+        this.y = y;
+        this.value = value;
+    }
 
-	@Override
-	public int compareTo(Node o) {
-		return this.weight - o.weight;
-	}
+    public int compareTo(Edge o) {
+        return this.value - o.value;
+    }
 }
