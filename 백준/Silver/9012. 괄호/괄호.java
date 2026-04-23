@@ -1,43 +1,48 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        List<String[]> list = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
-            list.add(br.readLine().trim().split(""));
-        }
 
-        for (String[] s : list) {
-            System.out.println(check(s));
-        }
+        int testCount = Integer.parseInt(br.readLine());
 
-    }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < testCount; i++) {
+            char[] chars = br.readLine().toCharArray();
 
-    public static String check(String[] strings) {
-        Stack<String> stack = new Stack<>();
-        for (String s : strings) {
-            if (Objects.equals(s, "(")) {
-                stack.push(s);
-            } else if (stack.empty()) {
-                return "NO";
+            if (isValid(chars)) {
+                sb.append("YES").append("\n");
             } else {
-                stack.pop();
+                sb.append("NO").append("\n");
             }
         }
 
-        if (stack.isEmpty()) {
-            return "YES";
+        System.out.println(sb.toString());
+
+
+    }
+
+    public static boolean isValid(char[] target) {
+        Stack<Character> stack = new Stack<>();
+
+        for (char ch : target) {
+            if (ch == '(') {
+                stack.push(ch);
+            } else {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                } else {
+                    return false;
+                }
+            }
         }
-        return "NO";
+
+        return stack.isEmpty();
     }
 
 
 }
+
