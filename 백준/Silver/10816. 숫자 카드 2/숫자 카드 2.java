@@ -1,45 +1,38 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static int N;
-    static Map<Integer, Integer> cards;
-    static int M;
-    static int[] find;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
+
+        Map<Long, Integer> map = new HashMap<>();
+
+        int n = Integer.parseInt(br.readLine());
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        cards = new HashMap<>();
-
-        for (int i = 0; i < N; i++) {
-            int number = Integer.parseInt(st.nextToken());
-            if (cards.get(number) == null) {
-                cards.put(number, 1);
-            } else {
-                cards.put(number, cards.get(number) + 1);
-            }
+        for (int i = 0; i < n; i++) {
+            long now = Long.parseLong(st.nextToken());
+            map.put(now, map.getOrDefault(now, 0) + 1);
         }
 
-        M = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
 
-        st = new StringTokenizer(br.readLine());
+
         StringBuilder sb = new StringBuilder();
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < m; i++) {
+            long now = Long.parseLong(st.nextToken());
 
-        for (int i = 0; i < M; i++) {
-            int find = Integer.parseInt(st.nextToken());
-            if (cards.get(find) == null) {
-                sb.append(0).append(" ");
-            } else {
-                sb.append(cards.get(find)).append(" ");
-            }
+            sb.append(map.getOrDefault(now, 0)).append(" ");
         }
-        System.out.println(sb.toString());
+
+        System.out.println(sb);
+
 
     }
+
+
 }
+
