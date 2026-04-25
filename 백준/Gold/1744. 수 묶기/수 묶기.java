@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -9,25 +10,23 @@ public class Main {
 
         int n = Integer.parseInt(br.readLine());
 
-
         List<Integer> plus = new ArrayList<>();
-
         List<Integer> minus = new ArrayList<>();
 
-        int oneCount = 0;
 
         int zeroCount = 0;
+        int oneCount = 0;
 
         for (int i = 0; i < n; i++) {
-            int number = Integer.parseInt(br.readLine());
-            if (number > 1) {
-                plus.add(number);
-            } else if (number == 1) {
+            int now = Integer.parseInt(br.readLine());
+            if (now > 1) {
+                plus.add(now);
+            } else if (now == 1) {
                 oneCount++;
-            } else if (number == 0) {
+            } else if (now == 0) {
                 zeroCount++;
             } else {
-                minus.add(number);
+                minus.add(now);
             }
         }
 
@@ -35,34 +34,26 @@ public class Main {
         Collections.sort(minus);
 
         int result = 0;
-
         for (int i = 0; i < plus.size(); i += 2) {
-            if (i + 1 < plus.size()) {
-                result += plus.get(i) * plus.get(i + 1);
+            if (plus.size() > i + 1) {
+                result += (plus.get(i) * plus.get(i + 1));
             } else {
                 result += plus.get(i);
             }
         }
 
         for (int i = 0; i < minus.size(); i += 2) {
-
-            if (i + 1 < minus.size()) {
-
-                result += minus.get(i) * minus.get(i + 1);
-
+            if (minus.size() > i + 1) {
+                result += (minus.get(i) * minus.get(i + 1));
             } else {
-
                 if (zeroCount == 0) {
-
                     result += minus.get(i);
-
                 }
-
             }
 
         }
 
-        result += oneCount;
+        result+= oneCount;
 
         System.out.println(result);
 
