@@ -7,48 +7,51 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int n = Integer.parseInt(br.readLine());
 
         int[] array = new int[n];
+
+
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            array[i] = Integer.parseInt(st.nextToken());
+            int now = Integer.parseInt(st.nextToken());
+
+            array[i] = now;
         }
 
         Arrays.sort(array);
 
-        int[] result = new int[2];
-        int min = Integer.MAX_VALUE;
+        int left = 0;
+        int right = n - 1;
 
-        for (int i = 0; i < n; i++) {
-            int now = array[i];
+        int answerLeft = array[left];
+        int answerRight = array[right];
 
-            int start = i + 1;
-            int end = n - 1;
+        int min = Math.abs(array[left] + array[right]);
 
-            while (start <= end) {
-                int mid = (start + end) / 2;
-                int sum = now + array[mid];
+        while (left < right) {
+            int sum = array[left] + array[right];
 
-                if (Math.abs(sum) < min) {
-                    result[0] = now;
-                    result[1] = array[mid];
-                    min = Math.abs(sum);
-                }
+            if (Math.abs(sum) < min) {
+                min = Math.abs(sum);
+                answerLeft = array[left];
+                answerRight = array[right];
+            }
 
-                if (sum < 0) {
-                    start = mid + 1;
-                } else {
-                    end = mid - 1;
-                }
+            if (sum > 0) {
+                right--;
+            } else if (sum < 0) {
+                left++;
+            } else {
+                break;
             }
         }
 
-        System.out.println(result[0] + " " + result[1]);
+        System.out.println(answerLeft + " " + answerRight);
 
 
     }
 
 
 }
-
