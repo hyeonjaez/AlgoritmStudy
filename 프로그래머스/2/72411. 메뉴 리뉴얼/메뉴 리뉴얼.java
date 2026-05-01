@@ -1,61 +1,53 @@
 import java.util.*;
-
 class Solution {
-    
-    char[] chars;
-    int max;
-
     public String[] solution(String[] orders, int[] course) {
         List<String> result = new ArrayList<>();
-
-
-        for (int ors : course) {
+        for (int cos : course) {
             Map<String, Integer> map = new HashMap<>();
-            max = 0;
             for (String order : orders) {
-                char[] orderChar = order.toCharArray();
-                Arrays.sort(orderChar);
-                chars = new char[ors];
-                back(ors, 0, 0, orderChar, map);
+
+                char[] chars = order.toCharArray();
+                Arrays.sort(chars);
+
+                back(cos, 0, 0, new char[cos], chars, map);
             }
 
-            for (Map.Entry<String, Integer> m : map.entrySet()) {
-                if (m.getValue() >= 2 && m.getValue() == max) {
-                    result.add(m.getKey());
+            int max = 0;
+
+            for (int count : map.values()) {
+                if (count >= 2) {
+                    max = Math.max(max, count);
                 }
             }
+
+            for (String key : map.keySet()) {
+                if (map.get(key) == max && max >= 2) {
+                    result.add(key);
+                }
+            }
+
         }
 
-
-
-        return result.stream().
-
-                sorted().
-
-                toArray(String[]::new);
+        Collections.sort(result);
+        return result.toArray(new String[0]);
     }
 
-    public void back(int number, int depth, int start, char[] target, Map<String, Integer> map) {
-        if (number == depth) {
+    public void back(int target, int depth, int start, char[] result, char[] chars, Map<String, Integer> map) {
+        if (target == depth) {
             StringBuilder sb = new StringBuilder();
-            for (char c : chars) {
-                sb.append(c);
+
+            for (char ch : result) {
+                sb.append(ch);
             }
 
-            if (map.containsKey(sb.toString())) {
-                map.put(sb.toString(), map.get(sb.toString()) + 1);
-            } else {
-                map.put(sb.toString(), 1);
-            }
-
-            max = Math.max(max, map.get(sb.toString()));
+            map.put(sb.toString(), map.getOrDefault(sb.toString(), 0) + 1);
             return;
         }
 
-        for (int i = start; i < target.length; i++) {
-            chars[depth] = target[i];
-            back(number, depth + 1, i + 1, target, map);
+        for (int i = start; i < chars.length; i++) {
+            result[depth] = chars[i];
+
+            back(target, depth + 1, i + 1, result, chars, map);
         }
     }
 }
-
