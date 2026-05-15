@@ -1,36 +1,42 @@
 import java.util.*;
 class Solution {
     public int[] solution(String[] gems) {
-        int[] answer = new int[2];
+        Set<String> kinds = new HashSet<>(Arrays.asList(gems));
+        int totalItem = kinds.size();
 
-        int size = new HashSet<>(Arrays.asList(gems)).size();
+        int left = 0;
+        int right = 0;
 
-        int length = Integer.MAX_VALUE;
-        int start = 0;
-
-
+        int leftAnswer = 0;
+        int rightAnswer = gems.length - 1;
+        int minLength = gems.length;
         Map<String, Integer> map = new HashMap<>();
 
+        while (right < gems.length) {
+            map.put(gems[right], map.getOrDefault(gems[right], 0) + 1);
 
-        for (int end = 0; end < gems.length; end++) {
-            map.put(gems[end], map.getOrDefault(gems[end], 0) + 1);
+            while (map.size() == totalItem) {
+                int currentLength = right - left;
 
-            while (map.get(gems[start]) > 1) {
-                map.put(gems[start], map.get(gems[start]) - 1);
-                start++;
+                if (currentLength < minLength) {
+                    minLength = currentLength;
+                    leftAnswer = left;
+                    rightAnswer = right;
+                }
+
+                map.put(gems[left], map.get(gems[left]) - 1);
+
+                if (map.get(gems[left]) == 0) {
+                    map.remove(gems[left]);
+                }
+
+                left++;
             }
 
-            if (map.size() == size && length > end - start) {
-                length = end - start;
-
-                answer[0] = start + 1;
-                answer[1] = end + 1;
-            }
-
-
+            right++;
         }
 
 
-        return answer;
+        return new int[]{leftAnswer + 1, rightAnswer+1};
     }
 }
