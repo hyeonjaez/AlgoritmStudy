@@ -2,79 +2,63 @@ import java.util.*;
 
 class Solution {
     public String[] solution(String[] files) {
-        String[] answer = {};
-        Map<Node, String> map = new HashMap<>();
-        PriorityQueue<Node> queue = new PriorityQueue<>();
-        int number = 1;
-        for (String file : files) {
-            parse(file, map, queue, number);
-            number++;
-        }
-        List<String> list = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            Node n = queue.poll();
+        String[] result = new String[files.length];
+        Node[] nodeArray = new Node[files.length];
 
-            list.add(map.get(n));
+        for (int i = 0; i < files.length; i++) {
+            nodeArray[i] = new Node(files[i]);
         }
 
+        Arrays.sort(nodeArray);
 
-        return list.stream().map(o -> o).toArray(String[]::new);
+        for (int i = 0; i < files.length; i++) {
+            result[i] = nodeArray[i].name;
+        }
+
+        return result;
     }
 
-    public void parse(String str, Map<Node, String> map, PriorityQueue<Node> queue, int count) {
-        StringBuilder head = new StringBuilder();
-        StringBuilder number = new StringBuilder();
-        for (int i = 0; i < str.length(); i++) {
-            char ch = str.charAt(i);
 
-            if (ch == '.') {
-                break;
-            }
-
-            if (ch >= '0' && ch <= '9') {
-                number.append(ch);
-            } else if (number.length() <= 0) {
-                head.append(ch);
-            } else {
-                break;
-            }
-
-        }
-
-        Node node = new Node(head.toString(), Integer.parseInt(number.toString()), count);
-        map.put(node, str);
-        queue.add(node);
-    }
 }
 
 class Node implements Comparable<Node> {
+    String name;
     String head;
     int number;
-    int count;
 
-    Node(String head, int number, int count) {
-        this.head = head;
-        this.number = number;
-        this.count = count;
+    Node(String name) {
+        this.name = name;
+        parse();
+    }
+
+    private void parse() {
+        int i = 0;
+
+        while (i < name.length() && !Character.isDigit(name.charAt(i))) {
+
+            i++;
+
+        }
+
+        head = name.substring(0, i).toUpperCase();
+
+        int numberStart = i;
+
+        while (i < name.length() && Character.isDigit(name.charAt(i))) {
+
+            i++;
+
+        }
+
+        number = Integer.parseInt(name.substring(numberStart, i));
     }
 
     public int compareTo(Node o) {
-        String headUpper = head.toUpperCase();
-        String tarGetUpper = o.head.toUpperCase();
+        int compare = this.head.compareTo(o.head);
 
-        int headCompare = headUpper.compareTo(tarGetUpper);
-
-        if (headCompare != 0) {
-            return headCompare;
+        if (compare != 0) {
+            return compare;
         }
-
-        int numberCompare = Integer.compare(number, o.number);
-
-        if (numberCompare != 0) {
-            return numberCompare;
-        }
-
-        return Integer.compare(count, o.count);
+        return this.number - o.number;
     }
-
 }
