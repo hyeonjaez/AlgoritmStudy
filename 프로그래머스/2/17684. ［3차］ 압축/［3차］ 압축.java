@@ -6,13 +6,6 @@ class Solution {
         int number = init(map);
         List<Integer> list = new ArrayList<>();
 
-        for (int i = 0; i < msg.length(); i++) {
-            char now = msg.charAt(i);
-
-            if (map.containsKey(String.valueOf(now))) {
-
-            }
-        }
         int index = 0;
 
         while (index < msg.length()) {
