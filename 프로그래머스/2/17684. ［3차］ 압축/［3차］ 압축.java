@@ -1,43 +1,47 @@
 import java.util.*;
-
 class Solution {
+    Map<String, Integer> map;
+
     public int[] solution(String msg) {
-        Map<String, Integer> map = new HashMap<>();
-        int number = init(map);
-        List<Integer> list = new ArrayList<>();
+        List<Integer> answer = new ArrayList<>();
+        int count = 27;
 
         int index = 0;
+        init();
 
         while (index < msg.length()) {
-            String str = "";
+            String now = "";
 
             while (index < msg.length()) {
-                if (map.containsKey(str + msg.charAt(index))) {
-                    str += msg.charAt(index);
+                if (map.containsKey(now + msg.charAt(index))) {
+                    now += msg.charAt(index);
                     index++;
                 } else {
                     break;
                 }
             }
 
-            list.add(map.get(str));
+            answer.add(map.get(now));
 
             if (index < msg.length()) {
-                map.put(str + msg.charAt(index), number++);
+                map.put(now + msg.charAt(index), count++);
             }
+
+
         }
 
 
-        return list.stream().mapToInt(i -> i).toArray();
+        return answer.stream().mapToInt(o -> o).toArray();
     }
 
-    public int init(Map<String, Integer> map) {
-        int count = 1;
-        for (char i = 'A'; i <= 'Z'; i++) {
-            map.put(String.valueOf(i), count);
-            count++;
+    public void init() {
+        map = new HashMap<>();
+
+        char now = 'A';
+        for (int i = 1; i < 27; i++) {
+            map.put(String.valueOf(now), i);
+            now++;
         }
 
-        return count;
     }
 }
