@@ -1,51 +1,61 @@
 import java.util.*;
 class Solution {
-    public static final String ENTER = "님이 들어왔습니다.";
-    public static final String OUT = "님이 나갔습니다.";
-
-
-    public String[] solution(String[] record) {
-        String[] answer = {};
-
-        Queue<Node> queue = new LinkedList<>();
+     public String[] solution(String[] record) {
         Map<String, String> map = new HashMap<>();
 
-        for (String records : record) {
-            String[] split = records.split(" ");
+        Queue<Node> queue = new LinkedList<>();
+        for (String re : record) {
+            String[] split = re.split(" ");
             String command = split[0];
-            String id = split[1];
+            String id;
             String name;
-            if (!command.equals("Leave")) {
-                name = split[2];
 
-                map.put(id, name);
+            switch (command) {
+                case "Enter":
+                    id = split[1];
+                    name = split[2];
+                    map.put(id, name);
+                    queue.add(new Node(id, "님이 들어왔습니다."));
+                    break;
+                case "Leave":
+                    id = split[1];
+                    if (map.containsKey(id)) {
+                        queue.add(new Node(id, "님이 나갔습니다."));
+                    }
 
-            }
-
-            if (command.equals("Enter")) {
-                queue.add(new Node(id, ENTER));
-            } else if (command.equals("Leave")) {
-                queue.add(new Node(id, OUT));
+                    break;
+                case "Change":
+                    id = split[1];
+                    name = split[2];
+                    map.put(id, name);
+                    break;
+                default:
+                    break;
             }
         }
+        String[] answer = new String[queue.size()];
+        int index = 0;
 
-        List<String> list = new ArrayList<>();
         while (!queue.isEmpty()) {
             Node poll = queue.poll();
-            list.add(map.get(poll.id) + poll.message);
+
+            answer[index] = map.get(poll.id) + poll.command;
+            index++;
         }
 
 
-        return list.stream().toArray(String[]::new);
+        return answer;
     }
+
+
 }
 
 class Node {
     String id;
-    String message;
+    String command;
 
-    Node(String id, String message) {
+    Node(String id, String command) {
         this.id = id;
-        this.message = message;
+        this.command = command;
     }
 }
