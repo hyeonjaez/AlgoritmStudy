@@ -3,27 +3,25 @@ class Solution {
     public int solution(int cacheSize, String[] cities) {
         int answer = 0;
         Queue<String> queue = new LinkedList<>();
-        if (cacheSize == 0) {
-            return cities.length * 5;
-        }
-        for(String target : cities){
-            target = target.toUpperCase();
-            if(queue.contains(target)){
+
+        for (String st : cities) {
+            String str = st.toUpperCase();
+            if (queue.contains(str)) {
                 answer += 1;
-                queue.remove(target);
-                queue.add(target);
+                queue.remove(str);
+                queue.add(str);
                 continue;
+            } else {
+                queue.add(str);
+                answer += 5;
             }
-            
-            if(queue.size() >= cacheSize){
+
+            if (queue.size() > cacheSize) {
                 queue.poll();
             }
-            
-            queue.add(target);
-            answer += 5;
-            
+
         }
-        
+
         return answer;
     }
 }
