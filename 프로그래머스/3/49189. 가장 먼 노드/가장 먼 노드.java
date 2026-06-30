@@ -1,54 +1,57 @@
-import java.io.*;
 import java.util.*;
-
 class Solution {
-     List<Integer>[] map;
-     boolean[] visited;
-     int maxDepth;
-     int[] distance;
-    
+    int[] lengthArray;
+    List<Integer>[] array;
+    int max = Integer.MIN_VALUE;
+
     public int solution(int n, int[][] edge) {
-        visited = new boolean[n + 1];
-        map = new List[n + 1];
-
-        for(int i = 1; i <= n; i++) {
-            map[i] = new ArrayList<>();
+        array = new List[n + 1];
+        for (int i = 1; i <= n; i++) {
+            array[i] = new ArrayList<>();
         }
 
-        distance = new int[n + 1];
+        lengthArray = new int[n + 1];
 
-        for (int[] a : edge) {
-            map[a[0]].add(a[1]);
-            map[a[1]].add(a[0]);
+        Arrays.fill(lengthArray, Integer.MAX_VALUE);
+
+
+        for (int[] e : edge) {
+            array[e[0]].add(e[1]);
+            array[e[1]].add(e[0]);
         }
 
-        maxDepth = 0;
-        bfs(1);
-        int count = 0;
-        for (int a : distance) {
-            if (a == maxDepth) {
-                count++;
+        bfs();
+        
+        int result = 0;
+        for (int i = 2; i <= n; i++) {
+            if (lengthArray[i] == max) {
+                result++;
             }
         }
 
-        return count;
+
+        return result;
     }
 
-    public void bfs(int start) {
+    public void bfs() {
         Queue<int[]> queue = new LinkedList<>();
-        visited[start] = true;
-        queue.add(new int[]{start, 0});
+        queue.add(new int[]{1, 0});
 
         while (!queue.isEmpty()) {
             int[] now = queue.poll();
 
-            maxDepth = Math.max(maxDepth, now[1]);
+            if (now[1] > lengthArray[now[0]]) {
+                continue;
+            }
 
-            for (int a : map[now[0]]) {
-                if (!visited[a]) {
-                    visited[a] = true;
-                    distance[a] = now[1] + 1;
-                    queue.add(new int[]{a, now[1] + 1});
+            lengthArray[now[0]] = now[1];
+
+            for (int i : array[now[0]]) {
+                if (lengthArray[i] > now[1] + 1) {
+                    lengthArray[i] = now[1] + 1;
+                    queue.add(new int[]{i, now[1] + 1});
+
+                    max = Math.max(max, now[1] + 1);
                 }
             }
         }
